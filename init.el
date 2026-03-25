@@ -1,4 +1,17 @@
-;;; init.el --- Basic Editor  Configuration -*- lexical-binding: t -*-
+ ;;; init.el --- Basic Editor  Configuration -*- lexical-binding: t -*-
+
+(require 'package)
+(setq package-archives
+      '(("gnu"    . "https://elpa.gnu.org/packages/")
+        ("melpa"  . "https://melpa.org/packages/")
+        ;; 如果你在国内，连接官方源慢，可以用清华大学镜像（推荐）：
+        ;; ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+        ))
+(package-initialize)
+
+;; 自动刷新索引（如果本地没有缓存）
+(unless package-archive-contents
+  (package-refresh-contents))
 
 ;; --- 1. 行号设置 ---
 (setq display-line-numbers-type 'relative)  ; 使用相对行号
@@ -45,4 +58,18 @@
 ;; 如果希望所有 Frame 都生效，把字体加入默认列表
 (add-to-list 'default-frame-alist '(font . "Maple Mono-13"))
 
+;; --- 7. 主题 ---
+(unless (package-installed-p 'gruvbox-theme)
+  (package-install 'gruvbox-theme))
+
+(load-theme 'gruvbox-dark-hard t)
 (provide 'init)
+
+;; --- 8. 模拟 vim 操作 ---
+(unless (package-installed-p 'evil)
+  (package-install 'evil))
+(require 'evil)
+(evil-mode 1)
+
+;; --- 9. 修改Emacs默认行为 ---
+(setq make-backup-files nil)
